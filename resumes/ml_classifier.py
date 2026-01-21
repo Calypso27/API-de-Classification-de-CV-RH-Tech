@@ -28,11 +28,7 @@ class CVClassifier:
             raise Exception("Modèle non chargé. Téléchargez-le depuis Kaggle.")
 
         X = self.vectorizer.transform([text])
-
-        # Prédire la catégorie
         predicted_category = self.model.predict(X)[0]
-
-        # Score de confiance
         probabilities = self.model.predict_proba(X)[0]
         confidence = max(probabilities)
 
@@ -44,5 +40,4 @@ class CVClassifier:
         return []
 
 
-# Instance globale du classifier
 cv_classifier = CVClassifier()

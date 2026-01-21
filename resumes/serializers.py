@@ -23,17 +23,11 @@ class ResumeSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'text_content', 'uploaded_at', 'user_name', 'classifications']
 
     def validate_file(self, value):
-        # Vérifier l'extension
         if not value.name.endswith(('.pdf', '.docx')):
-            raise serializers.ValidationError(
-                "Format non supporté. Utilisez PDF ou DOCX."
-            )
+            raise serializers.ValidationError("Format non supporté")
 
-        # Vérifier la taille (max 5MB)
         if value.size > 5 * 1024 * 1024:
-            raise serializers.ValidationError(
-                "Fichier trop volumineux. Maximum 5MB."
-            )
+            raise serializers.ValidationError("Fichier trop gros (max 5MB)")
 
         return value
 
@@ -58,9 +52,7 @@ class ClassificationSerializer(serializers.ModelSerializer):
 
     def validate_confidence_score(self, value):
         if not (0 <= value <= 1):
-            raise serializers.ValidationError(
-                "Le score de confiance doit être entre 0 et 1."
-            )
+            raise serializers.ValidationError("Score entre 0 et 1")
         return value
 
 
@@ -76,7 +68,7 @@ class JobPostingSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
 
-# Serializers optionnels pour les listes
+
 
 class ResumeListSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.username', read_only=True)

@@ -39,7 +39,6 @@ class ResumeViewSet(viewsets.ModelViewSet):
         resume = serializer.save(user=self.request.user)
 
         try:
-            # Extraire le texte du fichier
             logger.info(f"Extraction du texte pour le CV {resume.id}")
             text = extract_text(resume.file.path)
             resume.text_content = text
@@ -59,17 +58,14 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
         if not resume.text_content:
             return Response(
-                {'error': 'Aucun texte extrait du CV. Impossible de classifier.'},
+                {'error': 'Pas de texte dans le CV'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
             if not cv_classifier.is_loaded:
                 return Response(
-                    {
-                        'error': 'Modèle ML non disponible',
-                        'message': 'Veuillez télécharger le modèle depuis Kaggle et exécuter train_model.py'
-                    },
+                    {'error': 'Modèle non chargé'},
                     status=status.HTTP_503_SERVICE_UNAVAILABLE
                 )
 
@@ -160,14 +156,12 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
         if not resume.text_content:
             return Response(
-                {'error': 'Aucun texte extrait du CV. Impossible d\'extraire les compétences.'},
+                {'error': 'Pas de texte dans le CV'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
             logger.info(f"Extraction des compétences du CV {resume.id}")
-
-            # Extraire les compétences
             skills = utils_extract_skills(resume.text_content)
 
             return Response({
@@ -242,7 +236,6 @@ class ClassificationViewSet(viewsets.ReadOnlyModelViewSet):
             'categories_distribution': {}
         }
 
-        # Distribution par catégorie
         for category in Category.objects.all():
             count = classifications.filter(category=category).count()
             if count > 0:

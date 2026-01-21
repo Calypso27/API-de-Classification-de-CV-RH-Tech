@@ -159,14 +159,12 @@ class AuthenticationAPITest(APITestCase):
 
     def test_refresh_token(self):
         """Test de rafraîchissement du token"""
-        # Obtenir les tokens
         response = self.client.post('/api/token/', {
             'username': 'testuser',
             'password': 'testpass123'
         })
         refresh_token = response.data['refresh']
 
-        # Rafraîchir le token
         response = self.client.post('/api/token/refresh/', {
             'refresh': refresh_token
         })
@@ -257,14 +255,12 @@ class ResumeAPITest(APITestCase):
 
     def test_user_sees_only_own_resumes(self):
         """Test que l'utilisateur ne voit que ses propres CV"""
-        # Créer un CV pour un autre utilisateur
         Resume.objects.create(
             user=self.other_user,
             text_content="Other user resume"
         )
 
         response = self.client.get('/api/resumes/')
-        # L'utilisateur ne doit voir que son CV
         self.assertEqual(response.data['count'], 1)
 
     def test_retrieve_resume(self):
@@ -473,7 +469,6 @@ class JobPostingAPITest(APITestCase):
         """Test que l'utilisateur ne voit que les offres actives"""
         response = self.client.get('/api/jobpostings/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # L'utilisateur normal ne voit que les offres actives
         for job in response.data['results']:
             self.assertTrue(job['is_active'])
 
@@ -509,8 +504,7 @@ class SerializerValidationTest(TestCase):
 
     def test_resume_file_size_validation(self):
         """Test de validation de la taille du fichier"""
-        # Créer un fichier de plus de 5MB
-        large_content = b"x" * (6 * 1024 * 1024)  # 6MB
+        large_content = b"x" * (6 * 1024 * 1024)
         large_file = SimpleUploadedFile(
             "large.pdf",
             large_content,
@@ -526,7 +520,6 @@ class SerializerValidationTest(TestCase):
         category = Category.objects.create(name="Test", keywords="test")
         resume = Resume.objects.create(user=user, text_content="test")
 
-        # Score invalide (> 1)
         serializer = ClassificationSerializer(data={
             'resume': resume.id,
             'category': category.id,
@@ -534,7 +527,6 @@ class SerializerValidationTest(TestCase):
         })
         self.assertFalse(serializer.is_valid())
 
-        # Score invalide (< 0)
         serializer = ClassificationSerializer(data={
             'resume': resume.id,
             'category': category.id,

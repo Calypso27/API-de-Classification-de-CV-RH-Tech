@@ -9,7 +9,6 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
     def keywords_preview(self, obj):
-        """Affiche un aperçu des mots-clés (50 premiers caractères)"""
         if obj.keywords:
             return obj.keywords[:50] + '...' if len(obj.keywords) > 50 else obj.keywords
         return '-'
@@ -25,13 +24,11 @@ class ResumeAdmin(admin.ModelAdmin):
     ordering = ('-uploaded_at',)
 
     def has_text_content(self, obj):
-        """Indique si le texte a été extrait"""
         return bool(obj.text_content)
     has_text_content.boolean = True
     has_text_content.short_description = 'Texte extrait'
 
     def classifications_count(self, obj):
-        """Nombre de classifications pour ce CV"""
         return obj.classifications.count()
     classifications_count.short_description = 'Classifications'
 
@@ -45,7 +42,6 @@ class ClassificationAdmin(admin.ModelAdmin):
     ordering = ('-classified_at',)
 
     def get_queryset(self, request):
-        """Optimise les requêtes avec select_related"""
         return super().get_queryset(request).select_related('resume', 'category', 'resume__user')
 
 

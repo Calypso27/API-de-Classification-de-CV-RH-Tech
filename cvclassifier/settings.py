@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7*29w(fzqx+8i-7-ac_+m$wvqnxa**4ignvcf6dvu@nlnq!b1c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -161,34 +161,19 @@ REST_FRAMEWORK = {
 # LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 
-# Simple JWT Configuration
-
 SIMPLE_JWT = {
-    # Durée de vie des tokens
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-
-    # Rotation des refresh tokens (nouveau token à chaque refresh)
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-
-    # Algorithme de signature
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
-
-    # Headers
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-
-    # Claims utilisateur dans le token
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
-
-    # Validation
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
-
-    # Sliding tokens (optionnel)
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),

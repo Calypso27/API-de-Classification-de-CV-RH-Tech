@@ -1,6 +1,8 @@
-# API de Classification de CV (RH-Tech)
+# API de Classification de CV
 
-API REST pour classifier automatiquement des CV par secteur d'activité (Python Developer, Java Developer, Data Science, etc.) en utilisant le Machine Learning.
+Projet Master 2 Datascience - Institut Saint Jean
+
+API REST pour classifier des CV par secteur d'activité avec du Machine Learning (Naive Bayes).
 
 ## Technologies
 
@@ -62,11 +64,11 @@ python resumes/train_model.py
 | `/api/token/` | POST | Obtenir un token JWT |
 | `/api/token/refresh/` | POST | Rafraîchir le token |
 
-## Documentation Swagger
+## Documentation
 
-- Swagger UI : http://localhost:8000/swagger/
+Swagger UI disponible sur http://localhost:8000/
 
-## Exemples d'utilisation
+## Utilisation
 
 ### Obtenir un token
 
@@ -121,4 +123,6 @@ python manage.py test resumes
 
 ## Auteur
 
-MBENGMO CALYPSO  Projet Master 2 Datascience - Institut Saint Jean
+MBENGMO CALYPSO
+
+Projet dev web avec python 

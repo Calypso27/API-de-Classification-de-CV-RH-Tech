@@ -35,19 +35,16 @@ print(df.head(2))
 X = df['Resume_str']
 y = df['Category']
 
-# Nettons les valeurs manquantes
 print("\nNettoyage des donnees...")
 mask = X.notna() & y.notna()
 X = X[mask]
 y = y[mask]
 print(f"Donnees nettoyees: {len(X)} CV")
 
-# Afficher les catégories
 print(f"\nCategories trouvees: {y.nunique()}")
 print("\nDistribution des categories:")
 print(y.value_counts())
 
-# Split train/test
 print("\nSeparation train/test...")
 try:
     X_train, X_test, y_train, y_test = train_test_split(
@@ -62,7 +59,6 @@ except ValueError:
 print(f"Train: {len(X_train)} echantillons")
 print(f"Test: {len(X_test)} echantillons")
 
-# Vectorisation
 print("\nVectorisation du texte...")
 vectorizer = TfidfVectorizer(
     max_features=1500,
@@ -76,16 +72,13 @@ X_train_vec = vectorizer.fit_transform(X_train)
 X_test_vec = vectorizer.transform(X_test)
 print(f"Vocabulaire: {len(vectorizer.vocabulary_)} mots")
 
-# Entraînons le modèle
 print("\nEntrainement du modele...")
 model = MultinomialNB()
 model.fit(X_train_vec, y_train)
 
-# Évaluons la précisions du modèle
 accuracy = model.score(X_test_vec, y_test)
 print(f"\nPrecision du modele: {accuracy:.2%}")
 
-# Test sur quelques exemples
 print("\nTests sur 5 exemples:")
 for i in range(min(5, len(X_test))):
     sample_text = X_test.iloc[i]
@@ -100,7 +93,6 @@ for i in range(min(5, len(X_test))):
     print(f"  Reel: {true_label}")
     print(f"  Resultat: {'CORRECT' if pred_label == true_label else 'INCORRECT'}")
 
-# Sauvegarde du modèle
 print("\nSauvegarde du modele...")
 os.makedirs(ml_models_path, exist_ok=True)
 
@@ -110,7 +102,6 @@ with open(f'{ml_models_path}/resume_classifier.pkl', 'wb') as f:
 with open(f'{ml_models_path}/vectorizer.pkl', 'wb') as f:
     pickle.dump(vectorizer, f)
 
-# Sauvegarde des catégories
 categories = list(model.classes_)
 with open(f'{ml_models_path}/categories.pkl', 'wb') as f:
     pickle.dump(categories, f)
